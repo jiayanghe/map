@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<script  async defer
-        	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAekO2Hv10VPWmGUuPPLPVv104MN2TEjko&v=3&callback=ViewModel">
+        	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAekO2Hv10VPWmGUuPPLPVv104MN2TEjko&v=3&callback=initMap">
 		</script>
 		<script type='text/javascript' src='js/knockout-3.4.2.js'></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -11,10 +11,10 @@
 	</head>
 
 	<body>
-			<div id='menu' class='hide'>
+			<div id='menu' class='hideList'>
 				<i class="fa fa-bars" id='icon'></i>
-				<input type="text" id="search" onkeyup="filteration()" placeholder="Search for places">
-				<ul data-bind='foreach: list' id='list'>
+				<input type="text" id="search" onkeyup="filteration()" placeholder="Search for places" class='hide'>
+				<ul data-bind='foreach: list' id='list' class='hide'>
 					<li data-bind='text: name'></li>
 				</ul>	
 			</div>
