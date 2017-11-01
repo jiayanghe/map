@@ -6,11 +6,14 @@ let places = [
 	{name: 'James Cook U', location: {lat:-27.466698, lng:153.029495}}
 ];
 
-let markers = [];
+let map;
 
 function initMap() {
-	
-}
+	map = new google.maps.Map(document.getElementById('map'), {
+		center: {lat:-27.468657, lng:153.023913},
+		zoom: 13
+         });
+};
 
 let Place = function(data) {
 	this.name = ko.observable(data.name);
@@ -18,39 +21,32 @@ let Place = function(data) {
 }
 
 let ViewModel = function() {
-	function initMap() {
-		let map = new google.maps.Map(document.getElementById('map'), {
-			center: {lat:-27.468657, lng:153.023913},
-			zoom: 13
-	         });
-
-		places.forEach(function(place) { 
-			place.marker = new google.maps.Marker({
-				position: place.location,
-				map:map,
-				title: place.name,
-				animation: google.maps.Animation.DROP
-			});
-
-			place.info = new google.maps.InfoWindow({
-				content: place.name
-			});
-
-			place.marker.addListener('click', function() {
-	    		place.info.open(map, place.marker);
-	    		place.marker.setAnimation(google.maps.Animation.BOUNCE);
-	    		setTimeout(function() {
-	    			place.marker.setAnimation(null);
-	    		}, 2800);
-	  		});
-
-		});
-	};
 	let self = this;
 	this.list = ko.observableArray([]);
 	places.forEach(function(placeItem) {
 		self.list.push(new Place(placeItem) );
 	});	
+
+	places.forEach(function(place) { 
+		place.marker = new google.maps.Marker({
+			position: place.location,
+			map:map,
+			title: place.name,
+			animation: google.maps.Animation.DROP
+		});
+
+		place.info = new google.maps.InfoWindow({
+			content: place.name
+		});
+
+		place.marker.addListener('click', function() {
+    		place.info.open(map, place.marker);
+    		place.marker.setAnimation(google.maps.Animation.BOUNCE);
+    		setTimeout(function() {
+    			place.marker.setAnimation(null);
+    		}, 2800);
+  		});
+	});
 }
 
 
