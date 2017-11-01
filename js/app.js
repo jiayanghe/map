@@ -12,14 +12,7 @@ function initMap() {
 		zoom: 13
          });
 
-	places.forEach(function(place) { 
-		new google.maps.Marker({
-			position: place.location,
-			map:map,
-			title: place.name,
-			animation: google.maps.Animation.DROP
-		});
-	});
+	
 }
 
 let Place = function(data) {
@@ -33,6 +26,15 @@ let ViewModel = function() {
 	places.forEach(function(placeItem) {
 		self.list.push(new Place(placeItem) );
 	});	
+
+	places.forEach(function(place) { 
+		new google.maps.Marker({
+			position: place.location,
+			map:map,
+			title: place.name,
+			animation: google.maps.Animation.DROP
+		});
+	});
 }
 
 
