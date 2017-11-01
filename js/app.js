@@ -6,35 +6,48 @@ let places = [
 	{name: 'James Cook U', location: {lat:-27.466698, lng:153.029495}}
 ];
 
-function initMap() {
-	let map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat:-27.468657, lng:153.023913},
-		zoom: 13
-         });
+let markers = [];
 
-	
-}
+
 
 let Place = function(data) {
 	this.name = ko.observable(data.name);
 	this.location = ko.observable(data.location);
 }
 
-let ViewModel = function() {
-	let self = this;
-	this.list = ko.observableArray([]);
-	places.forEach(function(placeItem) {
-		self.list.push(new Place(placeItem) );
-	});	
+function ViewModel() {
+	let map = new google.maps.Map(document.getElementById('map'), {
+		center: {lat:-27.468657, lng:153.023913},
+		zoom: 13
+         });
 
 	places.forEach(function(place) { 
-		new google.maps.Marker({
+		place.marker = new google.maps.Marker({
 			position: place.location,
 			map:map,
 			title: place.name,
 			animation: google.maps.Animation.DROP
 		});
+
+		place.info = new google.maps.InfoWindow({
+			content: place.name
+		});
+
+		place.marker.addListener('click', function() {
+    		place.info.open(map, place.marker);
+    		place.marker.setAnimation(google.maps.Animation.BOUNCE);
+    		setTimeout(function() {
+    			place.marker.setAnimation(null);
+    		}, 2800);
+  		});
+
 	});
+
+	let self = this;
+	this.list = ko.observableArray([]);
+	places.forEach(function(placeItem) {
+		self.list.push(new Place(placeItem) );
+	});	
 }
 
 
@@ -56,6 +69,25 @@ $(document).ready(function(){
 	});
 
 });
+
+function filteration() {
+    var input, filter, ul, li, i;
+    input = document.getElementById('search');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById('list');
+    li = ul.getElementsByTagName('li');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+        if (li[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        };
+    };
+}
+
+
 
 ko.applyBindings(new ViewModel());
 
