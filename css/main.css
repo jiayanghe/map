@@ -6,14 +6,50 @@ html, body {
 }
 
 body {
-	display: inline-flex;
+	display: flex;
 }
 
 #map {
+	height: 100%;
+}
 
+.loc {
+	position: absolute;
+	left: 3%;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.movemap {
+	position: absolute;
+	left: 15%;
+	right: 0;
+	top: 0;
+	bottom: 0;
 }
 
 #menu {
+	height: 100%;
 	width: 15%;
 	background-color: black;
+	color: white;
+	display: flex;
+	flex-direction: column;
+}
+
+.hide {
+	position: absolute;
+	left: -12%;
+}
+
+#icon {
+	text-align: right;
+	margin: 0.7em 0.7em 0 0;
+	cursor:pointer;
+}
+
+li {
+	margin:5px;
+	cursor:pointer;
 }
