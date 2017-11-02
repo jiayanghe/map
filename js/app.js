@@ -53,16 +53,19 @@ let ViewModel = function() {
 			});
 
 
-			let wikiUrl = 'http://en.wikipedia.org//w/api.php?action=query&format=json&prop=images&titles='+place.key+'&callback=?';
+			let wikiUrl = 'https://api.unsplash.com/search/photos?page=1&query='+place.key;
 
 			$.ajax({
 				url: wikiUrl,
-				dataType: "jsonp",
+				headers: {Authorization:'Client-ID e96a9e41d2efb06c85eabdebf1af0d78ab5de378d7af81c30ea1a04bd7c5cd47'},
+				dataType: "json",
 				success: function(response) {
+					console.log(response);
 					//let articleList = response[1];
 					//articleStr = articleList[1];
-					place.info.setContent('<img src='+ response.query.pages.images[0]+ '></img>');
+					place.info.setContent('<img src='+ response.results[1].urls.small+ '></img>');
 				}
+
 			});
 
 
