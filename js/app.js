@@ -1,8 +1,8 @@
 let places = [
-	{name: 'Brisbane Town Hall', location: {lat:-27.468657, lng:153.023913}, key:'apple'},
-	{name: 'Cartier Brisbane', location: {lat:-27.469351, lng:153.027776}, key:'humming bird'},
-	{name: 'UQ', location: {lat:-27.496638, lng:153.013013}, key:'subaru'},
-	{name:'QUT', location:{lat:-27.477236, lng:153.028511}, key:'fuji'},
+	{name: 'Brisbane Town Hall', location: {lat:-27.468657, lng:153.023913}, key:'Brisbane Town Hall'},
+	{name: 'Cartier Brisbane', location: {lat:-27.469351, lng:153.027776}, key:'Cartier'},
+	{name: 'UQ', location: {lat:-27.496638, lng:153.013013}, key:'University of Queensland'},
+	{name:'QUT', location:{lat:-27.477236, lng:153.028511}, key:'Queensland University of Technology'},
 	{name: 'James Cook U', location: {lat:-27.466698, lng:153.029495}, key:'James Cook University'}
 ];
 
@@ -58,18 +58,12 @@ let ViewModel = function() {
 			$.ajax({
 				url: wikiUrl,
 				dataType: "jsonp",
-				/*
 				success: function(response) {
 					//let articleList = response[1];
 					//articleStr = articleList[1];
-					place.info.setContent('<img src='+ response.results[0].url + '></img>');
-				}*/
-			}).done(addImg);
-
-			function addImg(data) {
-				let image = '<img src='+ data.results[1].url + '></img>'
-				place.info.setContent(image);
-			}
+					place.info.setContent('<img src='+ response.query.pages.images[0]+ '></img>');
+				}
+			});
 
 
 			/*
