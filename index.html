@@ -14,9 +14,10 @@
 			<div id='menu' class='hideList'>
 				<i class="fa fa-bars" id='icon'></i>
 				<input type="text" id="search" onkeyup="filteration()" placeholder="Search for places" class='hide'>
-				<ul data-bind='foreach: list' id='list' class='hide'>
-					<li data-bind='text: name'></li>
+				<ul data-bind='foreach: places' id='list' class='hide'>
+					<li data-bind='text: name, click: $parent.select'></li>
 				</ul>	
+				<ul class="test"></ul>
 			</div>
 
 			<div id='map' class='loc'> </div>

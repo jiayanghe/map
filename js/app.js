@@ -1,18 +1,34 @@
 let places = [
-	{name: 'Brisbane Town Hall', location: {lat:-27.468657, lng:153.023913}},
-	{name: 'Cartier Brisbane', location: {lat:-27.469351, lng:153.027776}},
-	{name: 'UQ', location: {lat:-27.496638, lng:153.013013}},
-	{name:'QUT', location:{lat:-27.477236, lng:153.028511}},
-	{name: 'James Cook U', location: {lat:-27.466698, lng:153.029495}}
+	{name: 'Brisbane Town Hall', location: {lat:-27.468657, lng:153.023913}, key:'apple'},
+	{name: 'Cartier Brisbane', location: {lat:-27.469351, lng:153.027776}, key:'humming bird'},
+	{name: 'UQ', location: {lat:-27.496638, lng:153.013013}, key:'subaru'},
+	{name:'QUT', location:{lat:-27.477236, lng:153.028511}, key:'fuji'},
+	{name: 'James Cook U', location: {lat:-27.466698, lng:153.029495}, key:'James Cook University'}
 ];
 
-let map;
+let map, createMarkers, handleInfo;
+
+//Handler for clicks on list item or markers.
+handleInfo = function(selection) {
+	places.forEach(function(place) {
+			place.info.close();
+		});
+	selection.info.open(map, selection.marker);
+	selection.marker.setAnimation(google.maps.Animation.BOUNCE);
+	setTimeout(function() {
+		selection.marker.setAnimation(null);
+	}, 2800);
+
+};
+
+
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat:-27.468657, lng:153.023913},
 		zoom: 13
          });
+	createMarkers();
 };
 
 let Place = function(data) {
@@ -27,26 +43,76 @@ let ViewModel = function() {
 		self.list.push(new Place(placeItem) );
 	});	
 
-	places.forEach(function(place) { 
-		place.marker = new google.maps.Marker({
-			position: place.location,
-			map:map,
-			title: place.name,
-			animation: google.maps.Animation.DROP
-		});
+	createMarkers = function() {
+		places.forEach(function(place) { 
+			place.marker = new google.maps.Marker({
+				position: place.location,
+				map:map,
+				title: place.name,
+				animation: google.maps.Animation.DROP
+			});
 
-		place.info = new google.maps.InfoWindow({
-			content: place.name
-		});
 
-		place.marker.addListener('click', function() {
-    		place.info.open(map, place.marker);
-    		place.marker.setAnimation(google.maps.Animation.BOUNCE);
-    		setTimeout(function() {
-    			place.marker.setAnimation(null);
-    		}, 2800);
-  		});
-	});
+			let wikiUrl = 'http://en.wikipedia.org//w/api.php?action=query&format=json&prop=images&titles='+place.key+'&callback=?';
+
+			$.ajax({
+				url: wikiUrl,
+				dataType: "jsonp",
+				/*
+				success: function(response) {
+					//let articleList = response[1];
+					//articleStr = articleList[1];
+					place.info.setContent('<img src='+ response.results[0].url + '></img>');
+				}*/
+			}).done(addImg);
+
+			function addImg(data) {
+				let image = '<img src='+ data.results[1].url + '></img>'
+				place.info.setContent(image);
+			}
+
+
+			/*
+			$.ajax({
+			        type: "GET",
+			        url: "/w/api.php?action=query&format=json&prop=images&titles=Albert%20Einstein",
+			        contentType: "application/json; charset=utf-8",
+			        async: false,
+			        dataType: "json",
+			        success: function (data, textStatus, jqXHR) {
+			 
+			            var markup = data.parse.text["*"];
+			            var blurb = $('<div></div>').html(markup);
+			 
+			            // remove links as they will not work
+			            blurb.find('a').each(function() { $(this).replaceWith($(this).html()); });
+			 
+			            // remove any references
+			            blurb.find('sup').remove();
+			 
+			            // remove cite error
+			            blurb.find('.mw-ext-cite-error').remove();
+			            place.info.setContent(markup);
+			 
+			        },
+			        error: function (errorMessage) {
+			        }
+			    });
+			    */
+
+			place.info = new google.maps.InfoWindow({
+				//content: info collected from wikiPedia.
+			});
+
+			place.marker.addListener('click', function() {
+				handleInfo(place);
+	  		});
+		});
+	};
+
+	this.select = function(clickedPlace) {
+		handleInfo(clickedPlace);
+	};
 }
 
 
@@ -81,15 +147,61 @@ function filteration() {
     for (i = 0; i < li.length; i++) {
         if (li[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
             li[i].style.display = "";
+            places[i].marker.setMap(map);
         } else {
             li[i].style.display = "none";
+            places[i].marker.setMap(null);
         };
-    };
+    }
 }
 
 
 
 ko.applyBindings(new ViewModel());
+
+/*
+let wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+places[3].name+'&format=json&callback=wikiCallback';
+
+$.ajax({
+	url: wikiUrl,
+	dataType: "jsonp",
+	success: function(response) {
+		let articleList = response[1];
+		articleStr = articleList[1];
+		places[0].info.setContent(articleStr);
+	}
+});
+*/
+
+/*
+$.ajax({
+        type: "GET",
+        url: "http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=Jimi_Hendrix&callback=?",
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        dataType: "json",
+        success: function (data, textStatus, jqXHR) {
+ 
+            var markup = data.parse.text["*"];
+            var blurb = $('<div></div>').html(markup);
+ 
+            // remove links as they will not work
+            blurb.find('a').each(function() { $(this).replaceWith($(this).html()); });
+ 
+            // remove any references
+            blurb.find('sup').remove();
+ 
+            // remove cite error
+            blurb.find('.mw-ext-cite-error').remove();
+            $('.test').html($(blurb).find('p'));
+ 
+        },
+        error: function (errorMessage) {
+        }
+    });
+*/
+
+
 
 
 
