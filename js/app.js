@@ -30,17 +30,17 @@ function initMap() {
 		zoom: 13
          });
 	createMarkers();
-};
+}
 
 //default error handling function for google map api.
 function gm_authFailure() {
-	alert('Sorry, cannot retrieve google map data')
-};
+	alert('Sorry, cannot retrieve google map data');
+}
 
 let Place = function(data) {
 	this.name = ko.observable(data.name);
 	this.location = ko.observable(data.location);
-}
+};
 
 let ViewModel = function() {
 	let self = this;
@@ -88,7 +88,7 @@ let ViewModel = function() {
 	this.select = function(clickedPlace) {
 		handleInfo(clickedPlace);
 	};
-}
+};
 
 
 $(document).ready(function(){
@@ -105,7 +105,7 @@ $(document).ready(function(){
 		}else {
 			document.getElementById('map').classList.remove('loc');
 			document.getElementById('map').classList.add('movemap');
-		};
+		}
 		
 	});
 
@@ -128,7 +128,7 @@ function filteration() {
         } else {
             li[i].style.display = "none";// hide list item according to user input.
             places[i].marker.setMap(null);// hide the corresponding marker on the map.
-        };
+        }
     }
 }
 
