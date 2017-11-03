@@ -17,7 +17,7 @@ handleInfo = function(selection) {
 	selection.marker.setAnimation(google.maps.Animation.BOUNCE);
 	setTimeout(function() {
 		selection.marker.setAnimation(null);
-	}, 2800);
+	}, 1800);
 
 };
 
@@ -53,26 +53,22 @@ let ViewModel = function() {
 			});
 
 
-			let wikiUrl = 'https://api.unsplash.com/search/photos?page=1&query='+place.key;
-
+			//let image;
 			$.ajax({
-				url: wikiUrl,
+				url: 'https://api.unsplash.com/search/photos?page=1&query='+place.key,
 				headers: {Authorization:'Client-ID e96a9e41d2efb06c85eabdebf1af0d78ab5de378d7af81c30ea1a04bd7c5cd47'},
 				dataType: "json",
 				success: function(response) {
-					console.log(response);
-					//let articleList = response[1];
-					//articleStr = articleList[1];
-					place.info.setContent('<img src='+ response.results[1].urls.small+ '></img>');
+
+					place.info.setContent(place.key+'<br><br><img src='+ response.results[1].urls.small+ '></img>');
 				}
 
 			});
 
-
 			/*
 			$.ajax({
 			        type: "GET",
-			        url: "/w/api.php?action=query&format=json&prop=images&titles=Albert%20Einstein",
+			        url: "http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=Jimi_Hendrix&callback=?",
 			        contentType: "application/json; charset=utf-8",
 			        async: false,
 			        dataType: "json",
@@ -89,13 +85,13 @@ let ViewModel = function() {
 			 
 			            // remove cite error
 			            blurb.find('.mw-ext-cite-error').remove();
-			            place.info.setContent(markup);
+			            place.info.setContent(image+markup);
 			 
 			        },
 			        error: function (errorMessage) {
 			        }
 			    });
-			    */
+			*/
 
 			place.info = new google.maps.InfoWindow({
 				//content: info collected from wikiPedia.
@@ -156,47 +152,6 @@ function filteration() {
 
 ko.applyBindings(new ViewModel());
 
-/*
-let wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+places[3].name+'&format=json&callback=wikiCallback';
-
-$.ajax({
-	url: wikiUrl,
-	dataType: "jsonp",
-	success: function(response) {
-		let articleList = response[1];
-		articleStr = articleList[1];
-		places[0].info.setContent(articleStr);
-	}
-});
-*/
-
-/*
-$.ajax({
-        type: "GET",
-        url: "http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=Jimi_Hendrix&callback=?",
-        contentType: "application/json; charset=utf-8",
-        async: false,
-        dataType: "json",
-        success: function (data, textStatus, jqXHR) {
- 
-            var markup = data.parse.text["*"];
-            var blurb = $('<div></div>').html(markup);
- 
-            // remove links as they will not work
-            blurb.find('a').each(function() { $(this).replaceWith($(this).html()); });
- 
-            // remove any references
-            blurb.find('sup').remove();
- 
-            // remove cite error
-            blurb.find('.mw-ext-cite-error').remove();
-            $('.test').html($(blurb).find('p'));
- 
-        },
-        error: function (errorMessage) {
-        }
-    });
-*/
 
 
 
