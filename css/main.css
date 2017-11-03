@@ -62,3 +62,121 @@ input {
 .hide {
 	display: none;
 }
+
+
+
+@media screen and (max-width: 1050px) {
+	#menu {
+		width:20%;
+	}
+
+	.movemap {
+		position: absolute;
+		left: 20%;
+	}
+
+	.loc {
+		position: absolute;
+		left: 3%;
+		right: 0;
+		top: 0;
+		bottom: 0;
+	}
+
+	.hideList {
+		position: absolute;
+		left: -17%;
+	}
+
+}
+
+@media screen and (max-width: 825px) {
+	body{
+
+	}
+
+	#menu {
+		height: 21%;
+		width: 100%;
+		flex-direction: row;
+	}
+
+	.loc {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 30px;
+		bottom: 0;
+	}
+
+	.hideList {
+		position: absolute;
+		top:0;
+		left: 0;
+	}
+
+	#icon {
+		text-align:left;
+		margin: 0.5em 0.7em 0 0.7em;
+	}
+
+	.movemap {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 21%;
+		bottom: 0;
+	}
+
+	input {
+		width: 30%;
+		height: 10%;
+		margin: 0.9em 0.5em 0;
+	}
+
+	#list {
+		padding-left: 20px;
+		margin-top: 0.2em;
+	}
+
+}
+
+
+@media screen and (max-height: 550px) and (max-width: 825px) {
+
+	.movemap {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 30%;
+		bottom: 0;
+	}
+
+	#menu {
+		height: 30%;
+	}
+
+	.loc {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 7%;
+		bottom: 0;
+	}
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

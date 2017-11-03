@@ -31,6 +31,10 @@ function initMap() {
 	createMarkers();
 };
 
+function gm_authFailure() {
+	alert('Sorry, cannot retrieve google map data')
+};
+
 let Place = function(data) {
 	this.name = ko.observable(data.name);
 	this.location = ko.observable(data.location);
@@ -61,6 +65,9 @@ let ViewModel = function() {
 				success: function(response) {
 
 					place.info.setContent(place.key+'<br><br><img src='+ response.results[1].urls.small+ '></img>');
+				},
+				fail: function() {
+					alert('Sorry your data cannot be loaded')
 				}
 
 			});
