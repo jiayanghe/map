@@ -1,3 +1,4 @@
+//create list of places to show in the app.
 let places = [
 	{name: 'Brisbane Town Hall', location: {lat:-27.468657, lng:153.023913}, key:'Brisbane Town Hall'},
 	{name: 'Cartier Brisbane', location: {lat:-27.469351, lng:153.027776}, key:'Cartier'},
@@ -17,12 +18,12 @@ handleInfo = function(selection) {
 	selection.marker.setAnimation(google.maps.Animation.BOUNCE);
 	setTimeout(function() {
 		selection.marker.setAnimation(null);
-	}, 1800);
+	}, 1800);// the bouce should stop after a few bouces.
 
 };
 
 
-
+//calback function for google map api.
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat:-27.468657, lng:153.023913},
@@ -31,6 +32,7 @@ function initMap() {
 	createMarkers();
 };
 
+//default error handling function for google map api.
 function gm_authFailure() {
 	alert('Sorry, cannot retrieve google map data')
 };
@@ -47,6 +49,7 @@ let ViewModel = function() {
 		self.list.push(new Place(placeItem) );
 	});	
 
+	//for each place in the list, create a marker on the map.
 	createMarkers = function() {
 		places.forEach(function(place) { 
 			place.marker = new google.maps.Marker({
@@ -57,51 +60,22 @@ let ViewModel = function() {
 			});
 
 
-			//let image;
+			//request information for each place from unsplash.
 			$.ajax({
 				url: 'https://api.unsplash.com/search/photos?page=1&query='+place.key,
-				headers: {Authorization:'Client-ID e96a9e41d2efb06c85eabdebf1af0d78ab5de378d7af81c30ea1a04bd7c5cd47'},
+				headers: {Authorization:'Client-ID 3263ef8348ae2fde9bbef8765f3bc3bd71856d5e9a19bc7ae6390c320dbdb351'},
 				dataType: "json",
 				success: function(response) {
 
 					place.info.setContent(place.key+'<br><br><img src='+ response.results[1].urls.small+ '></img>');
 				},
-				fail: function() {
-					alert('Sorry your data cannot be loaded')
-				}
+			}).fail(function() {
+					alert('Sorry your data cannot be loaded, please refresh page');
+				});
 
-			});
-
-			/*
-			$.ajax({
-			        type: "GET",
-			        url: "http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=Jimi_Hendrix&callback=?",
-			        contentType: "application/json; charset=utf-8",
-			        async: false,
-			        dataType: "json",
-			        success: function (data, textStatus, jqXHR) {
-			 
-			            var markup = data.parse.text["*"];
-			            var blurb = $('<div></div>').html(markup);
-			 
-			            // remove links as they will not work
-			            blurb.find('a').each(function() { $(this).replaceWith($(this).html()); });
-			 
-			            // remove any references
-			            blurb.find('sup').remove();
-			 
-			            // remove cite error
-			            blurb.find('.mw-ext-cite-error').remove();
-			            place.info.setContent(image+markup);
-			 
-			        },
-			        error: function (errorMessage) {
-			        }
-			    });
-			*/
-
+			//create info window for each place
 			place.info = new google.maps.InfoWindow({
-				//content: info collected from wikiPedia.
+				//content: info collected from wikiPedia will be append.
 			});
 
 			place.marker.addListener('click', function() {
@@ -110,6 +84,7 @@ let ViewModel = function() {
 		});
 	};
 
+	//this function is triggered when user click a place name in the list.
 	this.select = function(clickedPlace) {
 		handleInfo(clickedPlace);
 	};
@@ -136,6 +111,8 @@ $(document).ready(function(){
 
 });
 
+//function use to filter the list and markers.
+// inspired by https://www.w3schools.com/howto/howto_js_filter_lists.asp
 function filteration() {
     var input, filter, ul, li, i;
     input = document.getElementById('search');
@@ -143,14 +120,14 @@ function filteration() {
     ul = document.getElementById('list');
     li = ul.getElementsByTagName('li');
 
-    // Loop through all list items, and hide those who don't match the search query
+    // Loop through all the places in the list, and hide places according to user input.
     for (i = 0; i < li.length; i++) {
         if (li[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
             li[i].style.display = "";
-            places[i].marker.setMap(map);
+            places[i].marker.setMap(map);// show the corresponding marker again if use delete input.
         } else {
-            li[i].style.display = "none";
-            places[i].marker.setMap(null);
+            li[i].style.display = "none";// hide list item according to user input.
+            places[i].marker.setMap(null);// hide the corresponding marker on the map.
         };
     }
 }
