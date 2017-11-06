@@ -18,7 +18,7 @@ handleInfo = function(selection) {
 	selection.marker.setAnimation(google.maps.Animation.BOUNCE);
 	setTimeout(function() {
 		selection.marker.setAnimation(null);
-	}, 1800);// the bouce should stop after a few bouces.
+	}, 1400);// the bouce should stop after a few bouces.
 
 };
 
@@ -37,6 +37,11 @@ function gm_authFailure() {
 	alert('Sorry, cannot retrieve google map data');
 }
 
+//fall back error handling method for loading google map api.
+function error() {
+	alert('Sorry, error occurred when loading google map');
+}
+
 let Place = function(data) {
 	this.name = ko.observable(data.name);
 	this.location = ko.observable(data.location);
@@ -48,6 +53,22 @@ let ViewModel = function() {
 	places.forEach(function(placeItem) {
 		self.list.push(new Place(placeItem) );
 	});	
+
+	this.keyWord = ko.observable('');
+	
+	
+	this.filteredList = ko.computed(function() {
+		let word = self.keyWord().toLowerCase();
+		if(!word) {
+			return self.list;
+			console.log('No Keyword');
+		}else {
+			console.log('keyWord');
+			return ko.utils.arrayFilter(self.list, function(item) {
+				return ko.utils.stringStartsWith(item.name.toLowerCase(), word)
+			});
+		}
+	}); 
 
 	//for each place in the list, create a marker on the map.
 	createMarkers = function() {
@@ -63,7 +84,7 @@ let ViewModel = function() {
 			//request information for each place from unsplash.
 			$.ajax({
 				url: 'https://api.unsplash.com/search/photos?page=1&query='+place.key,
-				headers: {Authorization:'Client-ID 3263ef8348ae2fde9bbef8765f3bc3bd71856d5e9a19bc7ae6390c320dbdb351'},
+				headers: {Authorization:'Client-ID 127f1bb2f4c4fb5bc4885e2a7376dce442acd5774c54a1a5468887fc988ea31e'},
 				dataType: "json",
 				success: function(response) {
 
@@ -113,7 +134,7 @@ $(document).ready(function(){
 
 //function use to filter the list and markers.
 // inspired by https://www.w3schools.com/howto/howto_js_filter_lists.asp
-function filteration() {
+/*function filteration() {
     var input, filter, ul, li, i;
     input = document.getElementById('search');
     filter = input.value.toUpperCase();
@@ -131,7 +152,7 @@ function filteration() {
         }
     }
 }
-
+*/
 
 
 ko.applyBindings(new ViewModel());
