@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script  async defer
-        	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAekO2Hv10VPWmGUuPPLPVv104MN2TEjko&v=3&callback=initMap">
-		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type='text/javascript' src='js/knockout-3.4.2.js'></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<link rel="stylesheet" href="css/main.css" type="text/css">
@@ -12,9 +10,10 @@
 
 	<body>
 			<div id='menu' class='hideList'>
-				<i class="fa fa-bars" id='icon'></i>
-				<input type="text" id="search" onkeyup="filteration()" placeholder="Search for places" class='hide'>
-				<ul data-bind='foreach: places' id='list' class='hide'>
+				<i class="fa fa-bars" id='icon' data-bind='click: menuHandler'></i>
+				<input type="text" id="search" class='hide' data-bind="value: keyWord, valueUpdate: 'afterkeydown', 
+				event: {keyup: filterMarker}">
+				<ul data-bind='foreach: filteredList' id='list' class='hide'>
 					<li data-bind='text: name, click: $parent.select'></li>
 				</ul>	
 			</div>
@@ -22,6 +21,9 @@
 			<div id='map' class='loc'> </div>
 
 			<script src='js/app.js'></script>
+			<script onerror="error()" async defer 
+	        	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAekO2Hv10VPWmGUuPPLPVv104MN2TEjko&v=3&callback=initMap">
+			</script>
 	</body>
 
 </html>	

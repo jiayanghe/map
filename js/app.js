@@ -9,18 +9,6 @@ let places = [
 
 let map, createMarkers, handleInfo;
 
-//Handler for clicks on list item or markers.
-handleInfo = function(selection) {
-	places.forEach(function(place) {
-			place.info.close();
-		});
-	selection.info.open(map, selection.marker);
-	selection.marker.setAnimation(google.maps.Animation.BOUNCE);
-	setTimeout(function() {
-		selection.marker.setAnimation(null);
-	}, 1400);// the bouce should stop after a few bouces.
-
-};
 
 
 //calback function for google map api.
@@ -51,70 +39,33 @@ let ViewModel = function() {
 	let self = this;
 	this.list = ko.observableArray([]);
 	places.forEach(function(placeItem) {
-		self.list.push(new Place(placeItem) );
+		self.list.push(placeItem);
 	});	
 
 	this.keyWord = ko.observable('');
 	
-	
+	//inspired by http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
 	this.filteredList = ko.computed(function() {
 		let word = self.keyWord().toLowerCase();
 		if(!word) {
-			return self.list;
-			console.log('No Keyword');
+			return self.list();
 		}else {
-			console.log('keyWord');
-			return ko.utils.arrayFilter(self.list, function(item) {
-				return ko.utils.stringStartsWith(item.name.toLowerCase(), word)
+			return ko.utils.arrayFilter(self.list(), function(item) {
+				return item.name.toLowerCase().includes(word);
 			});
 		}
 	}); 
 
-	//for each place in the list, create a marker on the map.
-	createMarkers = function() {
-		places.forEach(function(place) { 
-			place.marker = new google.maps.Marker({
-				position: place.location,
-				map:map,
-				title: place.name,
-				animation: google.maps.Animation.DROP
-			});
-
-
-			//request information for each place from unsplash.
-			$.ajax({
-				url: 'https://api.unsplash.com/search/photos?page=1&query='+place.key,
-				headers: {Authorization:'Client-ID 127f1bb2f4c4fb5bc4885e2a7376dce442acd5774c54a1a5468887fc988ea31e'},
-				dataType: "json",
-				success: function(response) {
-
-					place.info.setContent(place.key+'<br><br><img src='+ response.results[1].urls.small+ '></img>');
-				},
-			}).fail(function() {
-					alert('Sorry your data cannot be loaded, please refresh page');
-				});
-
-			//create info window for each place
-			place.info = new google.maps.InfoWindow({
-				//content: info collected from wikiPedia will be append.
-			});
-
-			place.marker.addListener('click', function() {
-				handleInfo(place);
-	  		});
+	this.filterMarker = function() {
+		self.list().forEach(function(place) {
+			place.marker.setMap(null);
 		});
-	};
+		self.filteredList().forEach(function(filteredPlace) {
+			filteredPlace.marker.setMap(map);
+		});
+	}
 
-	//this function is triggered when user click a place name in the list.
-	this.select = function(clickedPlace) {
-		handleInfo(clickedPlace);
-	};
-};
-
-
-$(document).ready(function(){
-	//show the list when user click the burger icon.
-	$('#icon').click(function() {
+	this.menuHandler = function() {
 		$('#menu').toggleClass('hideList');
 		$('#search,#list').toggleClass('hide');
 		let map = document.getElementById('map');
@@ -126,11 +77,63 @@ $(document).ready(function(){
 		}else {
 			document.getElementById('map').classList.remove('loc');
 			document.getElementById('map').classList.add('movemap');
-		}
-		
-	});
+		};
+	}
 
-});
+	//for each place in the list, create a marker on the map.
+	createMarkers = function() {
+		self.filteredList().forEach(function(place) { 
+			place.marker = new google.maps.Marker({
+				position: place.location,
+				map:map,
+				title: place.name,
+				animation: google.maps.Animation.DROP
+			});
+
+
+			//request information for each place from unsplash.
+			$.ajax({
+				url: 'https://api.unsplash.com/search/photos?page=1&query='+place.key,
+				headers: {Authorization:'Client-ID c0581391ed463fc73e3ebaafc1e2ce6e03858c6629933b2e6d5e4920d2b12602'},
+				dataType: "json",
+				success: function(response) {
+
+					place.info.setContent(place.key+'<br><br><img src='+ response.results[1].urls.small+ '></img>');
+				},
+			}).fail(function() {
+					//alert('Sorry your data cannot be loaded, please refresh page');
+				});
+
+			//create info window for each place
+			place.info = new google.maps.InfoWindow({
+				//content: info collected from wikiPedia will be append.
+			});
+
+			place.marker.addListener('click', function() {
+				self.handleInfo(place);
+	  		});
+		});
+	};
+
+
+	//Handler for clicks on list item or markers.
+	this.handleInfo = function(selection) {
+		places.forEach(function(place) {
+				place.info.close();
+			});
+		selection.info.open(map, selection.marker);
+		selection.marker.setAnimation(google.maps.Animation.BOUNCE);
+		setTimeout(function() {
+			selection.marker.setAnimation(null);
+		}, 1400);// the bouce should stop after a few bouces.
+
+	};
+	//this function is triggered when user click a place name in the list.
+	this.select = function(clickedPlace) {
+		self.handleInfo(clickedPlace);
+	};
+};
+
 
 //function use to filter the list and markers.
 // inspired by https://www.w3schools.com/howto/howto_js_filter_lists.asp
