@@ -101,7 +101,7 @@ let ViewModel = function() {
 					place.info.setContent(place.key+'<br><br><img src='+ response.results[1].urls.small+ '></img>');
 				},
 			}).fail(function() {
-					//alert('Sorry your data cannot be loaded, please refresh page');
+					alert('Sorry your data cannot be loaded, please refresh page');
 				});
 
 			//create info window for each place
@@ -134,28 +134,6 @@ let ViewModel = function() {
 	};
 };
 
-
-//function use to filter the list and markers.
-// inspired by https://www.w3schools.com/howto/howto_js_filter_lists.asp
-/*function filteration() {
-    var input, filter, ul, li, i;
-    input = document.getElementById('search');
-    filter = input.value.toUpperCase();
-    ul = document.getElementById('list');
-    li = ul.getElementsByTagName('li');
-
-    // Loop through all the places in the list, and hide places according to user input.
-    for (i = 0; i < li.length; i++) {
-        if (li[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-            places[i].marker.setMap(map);// show the corresponding marker again if use delete input.
-        } else {
-            li[i].style.display = "none";// hide list item according to user input.
-            places[i].marker.setMap(null);// hide the corresponding marker on the map.
-        }
-    }
-}
-*/
 
 
 ko.applyBindings(new ViewModel());
