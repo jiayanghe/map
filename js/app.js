@@ -63,7 +63,7 @@ let ViewModel = function() {
 		self.filteredList().forEach(function(filteredPlace) {
 			filteredPlace.marker.setMap(map);
 		});
-	}
+	};
 
 	this.menuHandler = function() {
 		$('#menu').toggleClass('hideList');
@@ -77,8 +77,8 @@ let ViewModel = function() {
 		}else {
 			document.getElementById('map').classList.remove('loc');
 			document.getElementById('map').classList.add('movemap');
-		};
-	}
+		}
+	};
 
 	//for each place in the list, create a marker on the map.
 	createMarkers = function() {
