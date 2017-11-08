@@ -1,11 +1,15 @@
 //create list of places to show in the app.
 let places = [
-	{name: 'Suncorp Stadium', location: {lat:-27.464501, lng:153.009493}, key:'Suncorp Stadium'},
-	//{name: 'Brisbane River', location: {lat:-27.475260, lng:153.023128}, key:'Brisbane River'},
-	//{name: 'Cartier Brisbane', location: {lat:-27.469351, lng:153.027776}, key:'Cartier'},
-	//{name: 'Story Bridge', location: {lat:-27.463937, lng:153.035754}, key:'story bridge'},
-	//{name:'Queens Plaza', location:{lat:-27.468145, lng:153.026151}, key:'queens plaza'},
-	//{name: 'Wheel of Brisbane', location: {lat:-27.475313, lng:153.020913}, key:'brisbane eye'}
+	{name: 'Brisbane City Botanic Gardens', location: {lat:-27.470845, lng:153.029244}, key:'Botanic Garden'},
+	{name: 'GOMA Gallery', location: {lat:-27.470845, lng:153.017213}, key:'GOMA Gallery'},
+	{name: 'Lone Pine Coala Sanctuary', location: {lat:-27.533772, lng:152.968804}, key:'Koala'},
+	{name: 'Airport', location: {lat:-27.394176, lng:153.121873}, key:'Brisbane Airport'},
+	{name: 'Suncorp Stadium', location: {lat:-27.464501, lng:153.009493}, key:'mt coo-tha'},
+	{name: 'Brisbane River', location: {lat:-27.475260, lng:153.023128}, key:'Brisbane River'},
+	{name: 'Cartier Brisbane', location: {lat:-27.469351, lng:153.027776}, key:'Cartier'},
+	{name: 'Story Bridge', location: {lat:-27.463937, lng:153.035754}, key:'story bridge'},
+	{name:'Queens Plaza', location:{lat:-27.468145, lng:153.026151}, key:'queens plaza'},
+	{name: 'Wheel of Brisbane', location: {lat:-27.475313, lng:153.020913}, key:'brisbane eye'}
 ];
 
 let map, createMarkers, handleInfo;
@@ -16,7 +20,7 @@ let map, createMarkers, handleInfo;
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat:-27.468657, lng:153.023913},
-		zoom: 13
+		zoom: 12
          });
 	createMarkers();
 }
@@ -100,7 +104,7 @@ let ViewModel = function() {
 			//request information for each place from unsplash.
 			$.ajax({
 				url: 'https://api.unsplash.com/search/photos?page=1&query='+place.key,
-				headers: {Authorization:'Client-ID c0581391ed463fc73e3ebaafc1e2ce6e03858c6629933b2e6d5e4920d2b12602'},
+				headers: {Authorization:'Client-ID 3263ef8348ae2fde9bbef8765f3bc3bd71856d5e9a19bc7ae6390c320dbdb351'},
 				dataType: "json",
 				success: function(response) {
 
