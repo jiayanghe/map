@@ -1,10 +1,11 @@
 //create list of places to show in the app.
 let places = [
-	{name: 'Brisbane River', location: {lat:-27.475260, lng:153.023128}, key:'Brisbane River'},
-	{name: 'Cartier Brisbane', location: {lat:-27.469351, lng:153.027776}, key:'Cartier'},
-	{name: 'Story Bridge', location: {lat:-27.463937, lng:153.035754}, key:'story bridge'},
-	{name:'Queens Plaza', location:{lat:-27.468145, lng:153.026151}, key:'queens plaza'},
-	{name: 'Wheel of Brisbane', location: {lat:-27.475313, lng:153.020913}, key:'brisbane eye'}
+	{name: 'Suncorp Stadium', location: {lat:-27.464501, lng:153.009493}, key:'Suncorp Stadium'},
+	//{name: 'Brisbane River', location: {lat:-27.475260, lng:153.023128}, key:'Brisbane River'},
+	//{name: 'Cartier Brisbane', location: {lat:-27.469351, lng:153.027776}, key:'Cartier'},
+	//{name: 'Story Bridge', location: {lat:-27.463937, lng:153.035754}, key:'story bridge'},
+	//{name:'Queens Plaza', location:{lat:-27.468145, lng:153.026151}, key:'queens plaza'},
+	//{name: 'Wheel of Brisbane', location: {lat:-27.475313, lng:153.020913}, key:'brisbane eye'}
 ];
 
 let map, createMarkers, handleInfo;
@@ -37,6 +38,11 @@ let Place = function(data) {
 
 let ViewModel = function() {
 	let self = this;
+
+	this.hideWelcome = function() {
+		$('.mask').css('display', 'none')
+	}
+
 	this.list = ko.observableArray([]);
 	places.forEach(function(placeItem) {
 		self.list.push(placeItem);
