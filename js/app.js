@@ -1,10 +1,10 @@
 //create list of places to show in the app.
 let places = [
-	{name: 'Brisbane Town Hall', location: {lat:-27.468657, lng:153.023913}, key:'Brisbane Town Hall'},
+	{name: 'Brisbane River', location: {lat:-27.475260, lng:153.023128}, key:'Brisbane River'},
 	{name: 'Cartier Brisbane', location: {lat:-27.469351, lng:153.027776}, key:'Cartier'},
-	{name: 'UQ', location: {lat:-27.496638, lng:153.013013}, key:'University of Queensland'},
-	{name:'QUT', location:{lat:-27.477236, lng:153.028511}, key:'Queensland University of Technology'},
-	{name: 'James Cook U', location: {lat:-27.466698, lng:153.029495}, key:'James Cook University'}
+	{name: 'Story Bridge', location: {lat:-27.463937, lng:153.035754}, key:'story bridge'},
+	{name:'Queens Plaza', location:{lat:-27.468145, lng:153.026151}, key:'queens plaza'},
+	{name: 'Wheel of Brisbane', location: {lat:-27.475313, lng:153.020913}, key:'brisbane eye'}
 ];
 
 let map, createMarkers, handleInfo;
